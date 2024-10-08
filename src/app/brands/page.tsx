@@ -12,12 +12,12 @@ interface Brand {
   id: number;
   name: string;
   description: string;
-  logo: File | null; // Change to string to hold URL
+  logo: File | string | null; // Updated to allow string URLs
 }
 
 export default function BrandsPage() {
   const [brands, setBrands] = useState<Brand[]>([]);
-  const [newBrand, setNewBrand] = useState<Brand>({ id: 0, name: '', description: '', logo: null });
+  const [newBrand, setNewBrand] = useState<Omit<Brand, 'id'>>({ name: '', description: '', logo: null });
   const [notification, setNotification] = useState<string | null>(null);
 
   useEffect(() => {
@@ -25,7 +25,7 @@ export default function BrandsPage() {
       const response = await fetch('http://127.0.0.1:8000/api/brands/');
       if (response.ok) {
         const data = await response.json();
-        setBrands(data);  // Update state with fetched brands
+        setBrands(data); // Update state with fetched brands
       } else {
         console.error('Failed to fetch brands');
       }
@@ -40,25 +40,20 @@ export default function BrandsPage() {
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]; // Access the first file
+    const file = e.target.files?.[0];
     if (file) {
-      setNewBrand(prev => ({ ...prev, logo: file })); // This should work now
+      setNewBrand(prev => ({ ...prev, logo: file })); // Set logo as File
     }
   };
 
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
     const formData = new FormData();
     formData.append('name', newBrand.name);
     formData.append('description', newBrand.description);
-  
-  // Type assertion to access the logo input correctly
-    const fileInput = e.currentTarget.querySelector('input[name="logo"]') as HTMLInputElement;
-    const file = fileInput.files?.[0]; // Access the first file
-  
-    if (file) {
-      formData.append('logo', file); // Only append logo if it's not null
+    if (newBrand.logo) {
+      formData.append('logo', newBrand.logo); // Only append logo if it's not null
     }
 
     try {
@@ -71,7 +66,7 @@ export default function BrandsPage() {
       }
       const brand = await response.json();
       setBrands(prev => [...prev, brand]);
-      setNewBrand({ id: 0, name: '', description: '', logo: null }); // Reset to initial state
+      setNewBrand({ name: '', description: '', logo: null }); // Reset to initial state
       setNotification("Brand created successfully!");
       setTimeout(() => setNotification(null), 3000);
     } catch (error) {
@@ -79,7 +74,6 @@ export default function BrandsPage() {
       setNotification("Failed to create brand");
     }
   };
-
 
   return (
     <div className="container mx-auto p-4">
@@ -125,7 +119,6 @@ export default function BrandsPage() {
               id="logo"
               name="logo"
               type="file"
-              accept="image/*"
               onChange={handleFileChange}
               required
             />
@@ -141,14 +134,14 @@ export default function BrandsPage() {
             <div key={brand.id} className="border p-4 rounded-lg">
               <h3 className="font-bold">{brand.name}</h3>
               <p>{brand.description}</p>
-              {brand.logo && (
+              {brand.logo ? (
                 <Image
-                  src={brand.logo} // Use brand.logo directly, which is expected to be a string
+                  src={typeof brand.logo === 'string' ? brand.logo : URL.createObjectURL(brand.logo)} // Create URL for File object
                   alt="Logo"
                   width={500}
                   height={300}
                 />
-              )}
+              ) : null}
             </div>
           ))}
         </div>
