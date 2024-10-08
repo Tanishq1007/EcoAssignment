@@ -18,7 +18,7 @@ interface Brand {
 export default function BrandsPage() {
   const [brands, setBrands] = useState<Brand[]>([]);
   const [newBrand, setNewBrand] = useState<Omit<Brand, 'id'>>({ name: '', description: '', logo: null });
-  const [logoFile, setLogoFile] = useState<File | null>(null); // State for the file
+  const [logoFile] = useState<File | null>(null); // State for the file
   const [notification, setNotification] = useState<string | null>(null);
 
   useEffect(() => {
