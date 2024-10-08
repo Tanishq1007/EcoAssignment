@@ -47,18 +47,18 @@ export default function BrandsPage() {
   };
 
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
     const formData = new FormData();
     formData.append('name', newBrand.name);
     formData.append('description', newBrand.description);
-    if (newBrand.logo) {
-      // Retrieve the File object from the URL and append
-      const file = e.currentTarget.logo.files?.[0];
-      if (file) {
-        formData.append('logo', file);
-      }
+  
+  // Type assertion to access the logo input correctly
+    const fileInput = e.currentTarget.querySelector('input[name="logo"]') as HTMLInputElement;
+    const file = fileInput.files?.[0]; // Access the first file
+  
+    if (file) {
+      formData.append('logo', file); // Only append logo if it's not null
     }
 
     try {
@@ -71,7 +71,7 @@ export default function BrandsPage() {
       }
       const brand = await response.json();
       setBrands(prev => [...prev, brand]);
-      setNewBrand({ name: '', description: '', logo: null }); // Reset to initial state
+      setNewBrand({ id: 0, name: '', description: '', logo: null }); // Reset to initial state
       setNotification("Brand created successfully!");
       setTimeout(() => setNotification(null), 3000);
     } catch (error) {
@@ -79,6 +79,7 @@ export default function BrandsPage() {
       setNotification("Failed to create brand");
     }
   };
+
 
   return (
     <div className="container mx-auto p-4">
