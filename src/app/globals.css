@@ -1,0 +1,100 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+/* Container for the entire brands section */
+.brands-container {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Heading for the brands page */
+.brands-heading {
+  font-size: 2.5rem;
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #333;
+  font-weight: bold;
+}
+
+/* Flexbox for horizontal brand cards */
+.brands-grid {
+  display: flex;              /* Use flexbox for horizontal alignment */
+  flex-wrap: wrap;           /* Allow items to wrap to the next line */
+  justify-content: center;    /* Center align the brand cards */
+  gap: 2rem;                 /* Space between brand cards */
+}
+
+/* Each brand card styling */
+.brand-card {
+  display: flex;              /* Use flexbox inside the card */
+  flex-direction: column;     /* Arrange items in a column */
+  align-items: center;        /* Center align items */
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 1rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+  width: 150px;              /* Set a fixed width for consistent sizing */
+}
+
+/* Brand card hover effect */
+.brand-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Logo inside each brand card */
+.brand-logo {
+  margin-bottom: 0.5rem;    /* Margin below the logo */
+  border-radius: 50%;        /* Optional: Make the logo circular */
+}
+
+/* Brand name under the logo */
+.brand-name {
+  font-size: 1rem;
+  color: #555;
+  font-weight: 600;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .brands-grid {
+    flex-direction: column; /* Stack cards vertically on small screens */
+    align-items: center;    /* Center align cards */
+  }
+
+  .brand-card {
+    width: 120px; /* Adjust width for smaller screens */
+  }
+
+  .brand-name {
+    font-size: 0.9rem; /* Smaller font for brand names */
+  }
+}
