@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import Link from 'next/link';
+import Image from 'next/image';
 
 interface Brand {
   id: number;
@@ -17,7 +18,7 @@ interface Brand {
 export default function BrandsPage() {
   const [brands, setBrands] = useState<Brand[]>([]);
   const [newBrand, setNewBrand] = useState<Omit<Brand, 'id'>>({ name: '', description: '', logo: null });
-  const [logoFile, setLogoFile] = useState<File | null>(null); // State for the file
+  //const [logoFile, setLogoFile] = useState<File | null>(null); // State for the file
   const [notification, setNotification] = useState<string | null>(null);
 
   useEffect(() => {
@@ -141,7 +142,7 @@ export default function BrandsPage() {
               <h3 className="font-bold">{brand.name}</h3>
               <p>{brand.description}</p>
               {typeof brand.logo === 'string' ? (
-                <img src={brand.logo} alt={`${brand.name} logo`} className="mt-2 w-16 h-16 object-contain" />
+                <Image src={logoFile} alt="Logo" width={500} height={300} />
               ) : null}
             </div>
           ))}
