@@ -40,11 +40,13 @@ export default function BrandsPage() {
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
+    const { files } = e.currentTarget; // Properly access files
+    const file = files?.[0]; // Access the first file
     if (file) {
-      setNewBrand(prev => ({ ...prev, logo: URL.createObjectURL(file) })); 
+      setNewBrand(prev => ({ ...prev, logo: file })); 
     }
   };
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
