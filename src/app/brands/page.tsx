@@ -12,30 +12,27 @@ interface Brand {
   id: number;
   name: string;
   description: string;
-  logo: File | null; // URL or local URL for the uploaded image
+  logo: string | null; // Change to string to hold URL
 }
 
 export default function BrandsPage() {
   const [brands, setBrands] = useState<Brand[]>([]);
   const [newBrand, setNewBrand] = useState<Omit<Brand, 'id'>>({ name: '', description: '', logo: null });
-  const [logoFile] = useState<File | null>(null); // State for the file
   const [notification, setNotification] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchBrands = async () => {
-        const response = await fetch('http://127.0.0.1:8000/api/brands/');
-        if (response.ok) {
-            const data = await response.json();
-            setBrands(data);  // Update state with fetched brands
-        } else {
-            console.error('Failed to fetch brands');
-        }
+      const response = await fetch('http://127.0.0.1:8000/api/brands/');
+      if (response.ok) {
+        const data = await response.json();
+        setBrands(data);  // Update state with fetched brands
+      } else {
+        console.error('Failed to fetch brands');
+      }
     };
 
     fetchBrands();
-}, []);
-
-
+  }, []);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -45,7 +42,7 @@ export default function BrandsPage() {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      setNewBrand(prev => ({ ...prev, logo: file })); 
+      setNewBrand(prev => ({ ...prev, logo: URL.createObjectURL(file) })); 
     }
   };
 
@@ -56,7 +53,11 @@ export default function BrandsPage() {
     formData.append('name', newBrand.name);
     formData.append('description', newBrand.description);
     if (newBrand.logo) {
-      formData.append('logo', newBrand.logo); // Only append logo if it's not null
+      // Retrieve the File object from the URL and append
+      const file = e.currentTarget.logo.files?.[0];
+      if (file) {
+        formData.append('logo', file);
+      }
     }
 
     try {
@@ -77,10 +78,6 @@ export default function BrandsPage() {
       setNotification("Failed to create brand");
     }
   };
-
-
-  
-
 
   return (
     <div className="container mx-auto p-4">
@@ -126,6 +123,7 @@ export default function BrandsPage() {
               id="logo"
               name="logo"
               type="file"
+              accept="image/*"
               onChange={handleFileChange}
               required
             />
@@ -141,9 +139,14 @@ export default function BrandsPage() {
             <div key={brand.id} className="border p-4 rounded-lg">
               <h3 className="font-bold">{brand.name}</h3>
               <p>{brand.description}</p>
-              {typeof brand.logo === 'string' ? (
-                <Image src={logoFile} alt="Logo" width={500} height={300} />
-              ) : null}
+              {brand.logo && (
+                <Image
+                  src={brand.logo} // Use brand.logo directly, which is expected to be a string
+                  alt="Logo"
+                  width={500}
+                  height={300}
+                />
+              )}
             </div>
           ))}
         </div>
