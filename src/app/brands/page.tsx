@@ -12,7 +12,7 @@ interface Brand {
   id: number;
   name: string;
   description: string;
-  logo: string | null; // Change to string to hold URL
+  logo: File | null; // Change to string to hold URL
 }
 
 export default function BrandsPage() {
@@ -40,10 +40,9 @@ export default function BrandsPage() {
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { files } = e.currentTarget; // Properly access files
-    const file = files?.[0]; // Access the first file
+    const file = e.target.files?.[0]; // Access the first file
     if (file) {
-      setNewBrand(prev => ({ ...prev, logo: file }));
+      setNewBrand(prev => ({ ...prev, logo: file })); // This should work now
     }
   };
 
