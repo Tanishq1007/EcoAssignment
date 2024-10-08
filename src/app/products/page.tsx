@@ -14,8 +14,8 @@ interface Product {
   description: string;
   category: string;
   price: number;
-  image: string;
-  brand: number; // Update to brand
+  image: string; // Change from imageUrl to image for consistency
+  brand: number;
 }
 
 interface Brand {
@@ -25,15 +25,15 @@ interface Brand {
 
 export default function ProductsPage() {
   const [products, setProducts] = useState<Product[]>([]);
-  const [brands, setBrands] = useState<Brand[]>([]); // State for brands
+  const [brands, setBrands] = useState<Brand[]>([]);
   const [newProduct, setNewProduct] = useState<Omit<Product, 'id' | 'image'>>({
     name: '',
     description: '',
     category: '',
     price: 0,
-    brand: 0, // Use brand instead of brandId
+    brand: 0,
   });
-  const [imageFile, setImageFile] = useState<File | null>(null); // State for the image file
+  const [imageFile, setImageFile] = useState<File | null>(null);
   const [notification, setNotification] = useState<string | null>(null);
 
   // Fetch products
@@ -58,7 +58,7 @@ export default function ProductsPage() {
     const fetchBrands = async () => {
       const response = await fetch('http://127.0.0.1:8000/api/brands/');
       const data = await response.json();
-      setBrands(data); // Set brands from the API
+      setBrands(data);
     };
 
     fetchBrands();
@@ -88,7 +88,7 @@ export default function ProductsPage() {
     formData.append('description', newProduct.description);
     formData.append('price', newProduct.price.toString());
     formData.append('category', newProduct.category);
-    formData.append('brand', newProduct.brand.toString()); // Submit brand ID
+    formData.append('brand', newProduct.brand.toString());
     if (imageFile) {
       formData.append('image', imageFile);
     }
@@ -108,6 +108,8 @@ export default function ProductsPage() {
       const data = await response.json();
       console.log('Product created:', data);
       setNotification('Product created successfully');
+      // Refresh the product list after adding a new product
+      setProducts(prev => [...prev, { ...data, id: prev.length + 1 }]); // Assuming `data` contains the new product
     } catch (error) {
       console.error('Error:', error);
     }
@@ -215,7 +217,14 @@ export default function ProductsPage() {
               <p>{product.description}</p>
               <p>Category: {product.category}</p>
               <p>Price: ${product.price.toFixed(2)}</p>
-              <Image src={product.imageUrl} alt={product.name} width={500} height={300} />
+              {product.image && ( // Ensure image exists before rendering
+                <Image
+                  src={product.image} // Assuming this is the correct property
+                  alt={product.name}
+                  width={500}
+                  height={300}
+                />
+              )}
               <p>Brand ID: {product.brand}</p>
             </div>
           ))}
