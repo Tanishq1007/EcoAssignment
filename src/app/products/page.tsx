@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import Link from 'next/link';
+import Image from 'next/image';
 
 interface Product {
   id: number;
@@ -214,7 +215,7 @@ export default function ProductsPage() {
               <p>{product.description}</p>
               <p>Category: {product.category}</p>
               <p>Price: ${product.price.toFixed(2)}</p>
-              <img src={product.image} alt={product.name} className="mt-2 w-32 h-32 object-cover" />
+              <Image src={product.imageUrl} alt={product.name} width={500} height={300} />
               <p>Brand ID: {product.brand}</p>
             </div>
           ))}
