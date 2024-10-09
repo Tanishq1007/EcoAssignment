@@ -39,7 +39,7 @@ export default function ProductsPage() {
   // Fetch products
   useEffect(() => {
     const fetchProducts = async () => {
-      const response = await fetch('http://127.0.0.1:8000/api/products/');
+      const response = await fetch('https://ecodb.onrender.com/api/products/');
       const data = await response.json();
 
       const productsWithNumbers = data.map((product: Product) => ({
@@ -56,7 +56,7 @@ export default function ProductsPage() {
   // Fetch brands
   useEffect(() => {
     const fetchBrands = async () => {
-      const response = await fetch('http://127.0.0.1:8000/api/brands/');
+      const response = await fetch('https://ecodb.onrender.com/api/brands/');
       const data = await response.json();
       setBrands(data);
     };
@@ -94,7 +94,7 @@ export default function ProductsPage() {
     }
 
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/products/', {
+      const response = await fetch('https://ecodb.onrender.com/api/products/', {
         method: 'POST',
         body: formData,
       });
