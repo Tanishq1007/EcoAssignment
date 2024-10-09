@@ -136,10 +136,10 @@ export default function BrandsPage() {
               <p>{brand.description}</p>
               {brand.logo ? (
                 <Image
-                src={brand.logo} // No need to createObjectURL
-                alt={`${brand.name} Logo`} // Improve alt text
-                width={500}
-                height={300}
+                  src={typeof brand.logo === 'string' ? brand.logo } // Create URL for File object
+                  alt="Logo"
+                  width={500}
+                  height={300}
                 />
               ) : null}
             </div>
