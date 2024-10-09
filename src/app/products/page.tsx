@@ -14,7 +14,7 @@ interface Product {
   description: string;
   category: string;
   price: number;
-  image: string; // Change from imageUrl to image for consistency
+  image: string; // Ensure this is consistent with your backend response
   brand: number;
 }
 
@@ -219,7 +219,7 @@ export default function ProductsPage() {
               <p>Price: ${product.price.toFixed(2)}</p>
               {product.image && ( // Ensure image exists before rendering
                 <Image
-                  src={product.image} // Assuming this is the correct property
+                  src={product.image} // Use the full image URL from the backend
                   alt={product.name}
                   width={500}
                   height={300}
