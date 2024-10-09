@@ -136,7 +136,7 @@ export default function BrandsPage() {
               <p>{brand.description}</p>
               {brand.logo ? (
                 <Image
-                  src={encodeURIComponent(brand.logo)} // Check URL handling
+                  src={typeof brand.logo === 'string' ? brand.logo : ''} // Check URL handling
                   alt={`${brand.name} Logo`}
                   width={500}
                   height={300}
