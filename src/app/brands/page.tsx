@@ -136,8 +136,8 @@ export default function BrandsPage() {
               <p>{brand.description}</p>
               {brand.logo ? (
                 <Image
-                  src={typeof brand.logo === 'string' ? brand.logo } // Create URL for File object
-                  alt="Logo"
+                  src={typeof brand.logo === 'string' ? brand.logo : URL.createObjectURL(brand.logo)} // Check URL handling
+                  alt={`${brand.name} Logo`}
                   width={500}
                   height={300}
                 />
